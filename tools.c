@@ -1108,6 +1108,8 @@ cString &cString::operator=(const cString &String)
 
 cString &cString::operator=(cString &&String)
 {
+  if (this == &String)
+     return *this;
   free(s);
   s = String.s;
   String.s = NULL;
