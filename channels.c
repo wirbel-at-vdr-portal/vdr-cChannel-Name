@@ -61,6 +61,7 @@ cChannel::cChannel(void)
   portalName = strdup("");
   memset(&__BeginData__, 0, (char *)&__EndData__ - (char *)&__BeginData__);
   parameters = "";
+  nameSourceMode = 0;
   modification = CHANNELMOD_NONE;
   seen         = 0;
   schedule     = NULL;
@@ -106,12 +107,15 @@ cChannel& cChannel::operator= (const cChannel &Channel)
 
 const char *cChannel::Name(void) const
 {
+  static cMutex mutex;
   if (Setup.ShowChannelNamesWithSource && !groupSep) {
+     cMutexLock MutexLock(&mutex);
      if (isempty(nameSource) || nameSourceMode != Setup.ShowChannelNamesWithSource) {
         if (Setup.ShowChannelNamesWithSource == 1)
            nameSource = cString::sprintf("%s (%c)", name, cSource::ToChar(source));
         else
            nameSource = cString::sprintf("%s (%s)", name, *cSource::ToString(source));
+        nameSourceMode = Setup.ShowChannelNamesWithSource;
         }
      return nameSource;
      }
