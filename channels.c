@@ -97,8 +97,6 @@ cChannel& cChannel::operator= (const cChannel &Channel)
   provider = strcpyrealloc(provider, Channel.provider);
   portalName = strcpyrealloc(portalName, Channel.portalName);
   memcpy(&__BeginData__, &Channel.__BeginData__, (char *)&Channel.__EndData__ - (char *)&Channel.__BeginData__);
-  nameSource = NULL; // these will be recalculated by UpdateNameSource()
-  shortNameSource = NULL;
   UpdateNameSource();
   parameters = Channel.parameters;
   return *this;
@@ -106,8 +104,11 @@ cChannel& cChannel::operator= (const cChannel &Channel)
 
 void cChannel::UpdateNameSource(void)
 {
-  if (Setup.ShowChannelNamesWithSource == 0)
+  if (Setup.ShowChannelNamesWithSource == 0) {
+     nameSource = NULL;
+     shortNameSource = NULL;
      return;
+  }
 
   if (Setup.ShowChannelNamesWithSource == 1)
      nameSource = cString::sprintf("%s (%c)", name, cSource::ToChar(source));
