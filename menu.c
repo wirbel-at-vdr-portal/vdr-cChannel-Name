@@ -4285,9 +4285,17 @@ eOSState cMenuSetupMisc::ProcessKey(eKeys Key)
 {
   bool OldSVDRPPeering = data.SVDRPPeering;
   bool ModifiedSVDRPSettings = false;
-  if (Key == kOk)
+  bool ModifiedShowChannelNamesWithSource = false;
+  if (Key == kOk) {
      ModifiedSVDRPSettings = data.SVDRPPeering != Setup.SVDRPPeering || strcmp(data.SVDRPHostName, Setup.SVDRPHostName);
+     ModifiedShowChannelNamesWithSource = data.ShowChannelNamesWithSource != Setup.ShowChannelNamesWithSource;
+     }
   eOSState state = cMenuSetupBase::ProcessKey(Key);
+  if (ModifiedShowChannelNamesWithSource) {
+     LOCK_CHANNELS_WRITE;
+     for (cChannel *Channel = Channels->First(); Channel; Channel = Channels->Next(Channel))
+         Channel->UpdateNameSource();
+     }
   if (data.SVDRPPeering != OldSVDRPPeering)
      Set();
   if (ModifiedSVDRPSettings) {

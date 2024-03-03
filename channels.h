@@ -123,9 +123,8 @@ private:
   int number;    // Sequence number assigned on load
   bool groupSep;
   int __EndData__;
-  mutable cString nameSource;
-  mutable int nameSourceMode;
-  mutable cString shortNameSource;
+  cString nameSource;
+  cString shortNameSource;
   cString parameters;
   mutable int modification;
   time_t seen; // When this channel was last seen in the SDT of its transponder
@@ -141,6 +140,7 @@ public:
   cString ToText(void) const;
   bool Parse(const char *s);
   bool Save(FILE *f);
+  void UpdateNameSource(void);
   const char *Name(void) const;
   const char *ShortName(bool OrName = false) const;
   const char *Provider(void) const { return provider; }
