@@ -88,6 +88,7 @@ class cChannel : public cListObject {
   friend class cSchedules;
   friend class cMenuEditChannel;
   friend class cDvbSourceParam;
+  friend class cMenuSetupMisc;
 private:
   static cString ToText(const cChannel *Channel);
   char *name;
@@ -132,6 +133,7 @@ private:
   cLinkChannels *linkChannels;
   cChannel *refChannel;
   cString TransponderDataToString(void) const;
+  void UpdateNameSource(void);
 public:
   cChannel(void);
   cChannel(const cChannel &Channel);
@@ -140,7 +142,6 @@ public:
   cString ToText(void) const;
   bool Parse(const char *s);
   bool Save(FILE *f);
-  void UpdateNameSource(void);
   const char *Name(void) const;
   const char *ShortName(bool OrName = false) const;
   const char *Provider(void) const { return provider; }
